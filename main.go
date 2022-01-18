@@ -16,7 +16,6 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 }
 
 // Home Page Template
-
 var tpl = template.Must(template.ParseFiles("./templates/home.html"))
 
 //  Home page Handler
@@ -25,7 +24,6 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 }
 
 //	2. About Page handler
-
 var ab = template.Must(template.ParseFiles("./templates/about.html"))
 
 func About(w http.ResponseWriter, r *http.Request) {
