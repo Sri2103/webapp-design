@@ -48,6 +48,14 @@ func main() {
 
 	app.Session = session
 
+	tc, err := renders.CreateTemplateCache()
+	if err != nil {
+		log.Fatal("cannot create template cache")
+	}
+
+	app.TemplateCache = tc
+	app.UseCache = false
+
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
 	renders.NewTemplates(&app)
@@ -64,7 +72,7 @@ func main() {
 		Handler: routes(&app),
 	}
 
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}

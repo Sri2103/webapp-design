@@ -32,7 +32,7 @@ func AddDefaultData(td *models.TemplateData) *models.TemplateData {
 func RenderTemplate(w http.ResponseWriter, filename string, td *models.TemplateData) {
 	var tc map[string]*template.Template
 
-	if app.Usecache {
+	if app.UseCache {
 		//if u can useCache stored in TemplateCache get templateCache from AppConfig otherwise Create new Cache from Createcache()
 		tc = app.TemplateCache
 	} else {
