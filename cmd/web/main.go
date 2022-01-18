@@ -2,56 +2,73 @@ package main
 
 import (
 	"log"
+	"myapp/pkg/config"
 	"myapp/pkg/handlers"
+	"myapp/pkg/renders"
 	"net/http"
 	"os"
+	"time"
+
+	"github.com/alexedwards/scs/v2"
 )
 
-// using  newmux
 // create a (server function/ Handler) to handle request and write response
-func HelloServer(w http.ResponseWriter, r *http.Request) {
+// func HelloServer(w http.ResponseWriter, r *http.Request) {
 
-	//fmt.Fprintf(w, "hello World")
-	w.Write([]byte("<h1>HelloWorld</h1>"))
-}
+// 	//fmt.Fprintf(w, "hello World")
+// 	w.Write([]byte("<h1>HelloWorld</h1>"))
+// }
 
-// Home Page Template
-//var tpl = template.Must(template.ParseFiles("./templates/home.html"))
+var app config.AppConfig
 
-//  Home page Handler
-//func HomePage(w http.ResponseWriter, r *http.Request) {
-//	tpl.Execute(w, nil)
-//}
-
-//	2. About Page handler
-//var ab = template.Must(template.ParseFiles("./templates/about.html"))
-
-//func About(w http.ResponseWriter, r *http.Request) {
-//	ab.Execute(w, nil)
-//}
+var session *scs.SessionManager
 
 func main() {
-	mux := http.NewServeMux()
+	// http.HandleFunc("/hello", HelloServer)
+	//mux := http.NewServeMux()
 
 	//Render the Pages templates
 
 	//handle the server function with mux router
 
-	mux.HandleFunc("/", HelloServer)
+	// mux.HandleFunc("/home", handlers.HomePage)
 
-	mux.HandleFunc("/home", handlers.HomePage)
-
-	mux.HandleFunc("/about", handlers.About)
+	// mux.HandleFunc("/about", handlers.About)
 
 	//getting Port value from env file
+
+	app.Inproduction = false
+
+	session = scs.New()
+
+	session.Lifetime = 24 * time.Hour
+	session.Cookie.Persist = true
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.Inproduction
+
+	app.Session = session
+
+	repo := handlers.NewRepo(&app)
+	handlers.NewHandlers(repo)
+	renders.NewTemplates(&app)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"
 	}
 
-	// address port to handle above server
 	log.Printf("listening on Port :%s", port)
 
-	http.ListenAndServe(":"+port, mux)
+	srv := http.Server{
+		Addr:    ":" + port,
+		Handler: routes(&app),
+	}
+
+	err := srv.ListenAndServe()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// address port to handle above server
 
 }
