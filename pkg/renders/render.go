@@ -44,8 +44,11 @@ func RenderTemplate(w http.ResponseWriter, filename string, td *models.TemplateD
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
+	log.Println(tc)
 	t, ok := tc[filename]
+	log.Println(filename)
 	log.Print(t)
+
 	if !ok {
 		log.Fatal("Could not get template from Cache")
 	}

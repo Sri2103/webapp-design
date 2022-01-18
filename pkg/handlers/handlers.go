@@ -27,11 +27,11 @@ func NewHandlers(r *Respository) {
 	Repo = r
 }
 
-func HelloServer(w http.ResponseWriter, r *http.Request) {
+// func HelloServer(w http.ResponseWriter, r *http.Request) {
 
-	//fmt.Fprintf(w, "hello World")
-	w.Write([]byte("<h1>HelloWorld</h1>"))
-}
+// 	//fmt.Fprintf(w, "hello World")
+// 	w.Write([]byte("<h1>HelloWorld</h1>"))
+// }
 
 //  Home page Handler
 // func HomePage(w http.ResponseWriter, r *http.Request) {
@@ -39,8 +39,8 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 // }
 
 func (m *Respository) Home(w http.ResponseWriter, r *http.Request) {
-	remotIP := r.RemoteAddr
-	m.App.Session.Put(r.Context(), "remotIp", remotIP)
+	remoteIP := r.RemoteAddr
+	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
 	renders.RenderTemplate(w, "home.page.html", &models.TemplateData{})
 }
 
@@ -50,11 +50,11 @@ func (m *Respository) About(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	stringMap["test"] = "Hello Again"
 
-	remoteIp := m.App.Session.GetString(r.Context(), "remote_Ip")
+	remoteIp := m.App.Session.GetString(r.Context(), "remote_ip")
 
 	stringMap["remote_Ip"] = remoteIp
 
-	renders.RenderTemplate(w, "about.Page.html", &models.TemplateData{
+	renders.RenderTemplate(w, "about.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 
