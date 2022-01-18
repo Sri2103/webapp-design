@@ -25,9 +25,12 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 }
 
 //	2. About Page handler
-// func About(w http.ResponseWriter, r *http.Request) {
 
-// }
+var ab = template.Must(template.ParseFiles("./templates/about.html"))
+
+func About(w http.ResponseWriter, r *http.Request) {
+	ab.Execute(w, nil)
+}
 
 func main() {
 	mux := http.NewServeMux()
@@ -39,6 +42,8 @@ func main() {
 	mux.HandleFunc("/", HelloServer)
 
 	mux.HandleFunc("/home", HomePage)
+
+	mux.HandleFunc("/about", About)
 
 	//getting Port value from env file
 	port := os.Getenv("PORT")
