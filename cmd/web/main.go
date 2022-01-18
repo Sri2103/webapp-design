@@ -1,8 +1,8 @@
 package main
 
 import (
-	"html/template"
 	"log"
+	"myapp/pkg/handlers"
 	"net/http"
 	"os"
 )
@@ -16,19 +16,19 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 }
 
 // Home Page Template
-var tpl = template.Must(template.ParseFiles("./templates/home.html"))
+//var tpl = template.Must(template.ParseFiles("./templates/home.html"))
 
 //  Home page Handler
-func HomePage(w http.ResponseWriter, r *http.Request) {
-	tpl.Execute(w, nil)
-}
+//func HomePage(w http.ResponseWriter, r *http.Request) {
+//	tpl.Execute(w, nil)
+//}
 
 //	2. About Page handler
-var ab = template.Must(template.ParseFiles("./templates/about.html"))
+//var ab = template.Must(template.ParseFiles("./templates/about.html"))
 
-func About(w http.ResponseWriter, r *http.Request) {
-	ab.Execute(w, nil)
-}
+//func About(w http.ResponseWriter, r *http.Request) {
+//	ab.Execute(w, nil)
+//}
 
 func main() {
 	mux := http.NewServeMux()
@@ -39,9 +39,9 @@ func main() {
 
 	mux.HandleFunc("/", HelloServer)
 
-	mux.HandleFunc("/home", HomePage)
+	mux.HandleFunc("/home", handlers.HomePage)
 
-	mux.HandleFunc("/about", About)
+	mux.HandleFunc("/about", handlers.About)
 
 	//getting Port value from env file
 	port := os.Getenv("PORT")
